@@ -7,32 +7,78 @@
     <!-- <link rel="stylesheet" href="ludo_board.css" /> -->
     <title>Ludo Board</title>
     <style>
+      /************* Colors **********/
+      :root {
+        --player-1-color: #e74c3c;
+        --player-2-color: #16a085;
+        --player-3-color: #2c3e50;
+        --player-4-color: #f1c40f;
+        --main-cell-color: #ecf0f1;
+        --main-bg-color: #dcdde1;
+      }
+
+      .player1, .player1 .circle {
+        background-color: var(--player-1-color);
+      }
+
+      .player2, .player2 .circle {
+        background-color: var(--player-2-color);
+      }
+
+      .player3, .player3 .circle {
+        background-color: var(--player-3-color);
+      }
+
+      .player4, .player4 .circle {
+        background-color: var(--player-4-color);
+      }
+
+      .player1-path .cell:nth-child(2), 
+      .player1-path .cell:nth-child(n+8):not(:nth-child(n+13)) {
+        background-color: var(--player-1-color);
+      }
+
+      .player2-path .cell:nth-child(3n+2):not(:nth-child(2)), 
+      .player2-path .cell:nth-child(6) {
+        background-color: var(--player-2-color);
+      }
+
+      .player3-path .cell:nth-child(3n+2):not(:nth-child(17)), 
+      .player3-path .cell:nth-child(13) {
+        background-color: var(--player-3-color);
+      }
+
+      .player4-path .cell:nth-child(n+7):not(:nth-child(n+12)),
+      .player4-path .cell:nth-child(17) {
+        background-color: var(--player-4-color);
+      }
+      /******************************/
+
       html {
         font-size: 10px;
       }
 
       body {
-        background: grey;
+        background: var(--main-bg-color);
         margin: 0;
         padding-bottom: 3rem;
       }
 
       .board {
+        margin: 5vh auto;
         width: 64.2rem;
         height: 64.2rem;
-        border: 0.3rem solid black;
         font-size: 0; /* to remove whitespace in between child elements */
       }
 
       .cell {
-        background: green;
+        background: var(--main-cell-color);
         width: 4rem;
         height: 4rem;
         display: inline-block;
       }
 
       .big-cell {
-        background: lightgreen;
         width: 25.5rem;
         height: 25.5rem;
         display: inline-block;
@@ -43,18 +89,15 @@
         height: 16rem;
         margin: 4rem;
         
-        border: 0.3rem solid black;
         box-sizing: border-box;
         padding: 2rem;
-        background: white;
+        background: var(--main-cell-color);
       }
 
       .circle {
         width: 4rem;
         height: 4rem;
-        border: 0.3rem solid black;
         border-radius: 50%;
-        background: red;
         float: left;
       }
 
@@ -78,8 +121,8 @@
         display: inline-block;
       }
 
+      /******** Center Styles ********/
       .center {
-        background: rgb(255, 255, 255);
         width: 12.6rem;
         height: 12.6rem;
         display: inline-block;
@@ -89,7 +132,6 @@
       }
 
       .triangle-up {
-        background-color: green;
         position: absolute;
         left: 0.22rem;
         height: calc(50% - 0.2rem);
@@ -98,7 +140,6 @@
       }
 
       .triangle-right {
-        background-color: rgb(250, 236, 48);
         position: absolute;
         top: 0.22rem;
         right: 0;
@@ -108,7 +149,6 @@
       }
 
       .triangle-down {
-        background-color: rgb(43, 43, 255);
         position: absolute;
         left: 0.22rem;
         bottom: 0;
@@ -122,20 +162,44 @@
         top: 0.19rem;
         left: 0;
 
-        background-color: red;
         width: calc(100% - 0.3rem);
         height: calc(100% - 0.37rem);
         clip-path: polygon(50% 50%, 0 0, 0 100%);
       }
 
-      .vertical-path, .center {
-        border-right: 3px solid black;
-        border-left: 3px solid black;
+      hr.center-line1, .center-line2 {
+        margin: 0;
+        border: 0;
+        height: 0.3rem;
+        background-color: black; 
+
+        position: absolute;
+        top: calc(50% - 0.15rem);
+        width: 18rem;
       }
 
-      hr.divider {
+      hr.center-line1 {
+        transform: translate(-2.68rem) rotate(45deg);
+      }
+
+      hr.center-line2 {
+        transform: translate(-2.68rem) rotate(-45deg);
+      }
+      /***************************/
+
+      /* Borders */
+      .board, .big-cell_box, .circle {
+        border: 0.3rem solid black;
+      }
+
+      .vertical-path, .center {
+        border-right: 0.3rem solid black;
+        border-left: 0.3rem solid black;
+      }
+
+      hr.horizontal-line {
         border: 0;
-        border-bottom: 3px solid black;
+        border-bottom: 0.3rem solid black;
       }
 
       .vertical-path .cell:not(:nth-child(n+16)) {
@@ -154,35 +218,11 @@
       .horizontal-path .cell:nth-child(n+7) {
         border-top: 0.3rem solid black;
       }
-
-      hr.line1, .line2 {
-        margin: 0;
-        border: 0;
-        height: 0.3rem;
-        background-color: black; 
-
-        position: absolute;
-        top: calc(50% - 0.15rem);
-        width: 18rem;
-      }
-
-      hr.line1 {
-        transform: translate(-2.68rem) rotate(45deg);
-      }
-
-      hr.line2 {
-        transform: translate(-2.68rem) rotate(-45deg);
-      }
-
-      .no-border {
-        border: none;
-        margin-left: 3rem;
-      }
     </style>
   </head>
   <body>
     <div class="board">
-      <div class="big-cell">
+      <div class="big-cell player1">
         <div class="big-cell_box">
           <div class="circle"></div>
           <div class="circle"></div>
@@ -190,7 +230,7 @@
           <div class="circle"></div>
         </div>
       </div>
-      <div class="vertical-path">
+      <div class="vertical-path player2-path">
         <div class="cell"></div>
         <div class="cell"></div>
         <div class="cell"></div>
@@ -210,7 +250,7 @@
         <div class="cell"></div>
         <div class="cell"></div>
       </div>
-      <div class="big-cell">
+      <div class="big-cell player2">
         <div class="big-cell_box">
           <div class="circle"></div>
           <div class="circle"></div>
@@ -218,8 +258,8 @@
           <div class="circle"></div>
         </div>
       </div>
-      <hr class="divider">
-      <div class="horizontal-path">
+      <hr class="horizontal-line">
+      <div class="horizontal-path player1-path">
         <div class="cell"></div>
         <div class="cell"></div>
         <div class="cell"></div>
@@ -240,14 +280,14 @@
         <div class="cell"></div>
       </div>
       <div class="center">
-        <hr class="line1">
-        <hr class="line2">
-        <div class="triangle-up"></div>
-        <div class="triangle-right"></div>
-        <div class="triangle-down"></div>
-        <div class="triangle-left"></div>
+        <hr class="center-line1">
+        <hr class="center-line2">
+        <div class="triangle-up player2"></div>
+        <div class="triangle-right player4"></div>
+        <div class="triangle-down player3"></div>
+        <div class="triangle-left player1"></div>
       </div>
-      <div class="horizontal-path">
+      <div class="horizontal-path player4-path">
         <div class="cell"></div>
         <div class="cell"></div>
         <div class="cell"></div>
@@ -267,8 +307,8 @@
         <div class="cell"></div>
         <div class="cell"></div>
       </div>
-      <hr class="divider">
-      <div class="big-cell">
+      <hr class="horizontal-line">
+      <div class="big-cell player3">
         <div class="big-cell_box">
           <div class="circle"></div>
           <div class="circle"></div>
@@ -276,7 +316,7 @@
           <div class="circle"></div>
         </div>
       </div>
-      <div class="vertical-path">
+      <div class="vertical-path player3-path">
         <div class="cell"></div>
         <div class="cell"></div>
         <div class="cell"></div>
@@ -296,7 +336,7 @@
         <div class="cell"></div>
         <div class="cell"></div>
       </div>
-      <div class="big-cell">
+      <div class="big-cell player4">
         <div class="big-cell_box">
           <div class="circle"></div>
           <div class="circle"></div>
